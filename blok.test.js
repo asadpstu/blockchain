@@ -7,18 +7,24 @@ describe('Block',()=>{
     const lastHash = 'foo-hash';
     const hash = 'bar-hash';
     const data = ["Blockchain",'Data']
+    const nonce = 1;
+    const difficulty = 1;
     const block = new Block({
         timeStamp : timeStamp,
         lastHash : lastHash,
         hash : hash,
-        data : data
+        data : data,
+        nonce : nonce,
+        difficulty : difficulty
     });
-
+    
     it('has a  timestap,lasthash,hash,data property',()=>{
         expect(block.timeStamp).toEqual(timeStamp);
         expect(block.lastHash).toEqual(lastHash);
         expect(block.hash).toEqual(hash);
         expect(block.data).toEqual(data);
+        expect(block.nonce).toEqual(nonce);
+        expect(block.difficulty).toEqual(difficulty);
 
     })
 
@@ -53,8 +59,21 @@ describe('Block',()=>{
         })
 
         it('creates a proper `sha 256` based input',()=>{
-           expect(minedBlock.hash).toEqual(cryptoHash(minedBlock.timeStamp,lastBlock.hash,data))  
+           expect(minedBlock.hash).toEqual(cryptoHash(
+               minedBlock.timeStamp,
+               minedBlock.nonce,
+               minedBlock.difficulty,
+               lastBlock.hash,
+               data
+               )
+            )  
         })
+         
+        it(`it sets 'hash' that matches difficulty criteria`,()=>{
+           expect(minedBlock.hash.substring(0,minedBlock.difficulty))
+             .toEqual('0'.repeat(minedBlock.difficulty));  
+        })
+
 
     })
 })

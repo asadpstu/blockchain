@@ -17,11 +17,11 @@ class Blockchain{
     if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) return false;
     for(var i=1;i<chain.length;i++)
     {
-        const { timeStamp,data,lastHash,hash } = chain[i];
+        const { timeStamp,data,lastHash,hash,nonce,difficulty } = chain[i];
         const lastActualHash = chain[i-1].hash;
         if(lastHash !== lastActualHash ) return false;
 
-        const validHash = cryptoHash(timeStamp,lastHash,data);
+        const validHash = cryptoHash(timeStamp,lastHash,data,nonce,difficulty);
         if(hash !== validHash) return false;
     }
     return true; 
